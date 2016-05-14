@@ -100,7 +100,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="grammatica-1.6">
+    <Reference Include="grammatica-1.6, Version=1.5.0.29099, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>KramdownParser\grammatica-1.6.dll</HintPath>
     </Reference>
     <Reference Include="System" />

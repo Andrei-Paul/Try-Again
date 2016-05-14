@@ -86,23 +86,49 @@ public class KramdownParser : RecursiveDescentParser {
         ProductionPattern             pattern;
         ProductionPatternAlternative  alt;
 
+        pattern = new ProductionPattern((int) KramdownConstants.BLOCK,
+                                        "Block");
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.ELEMENTS, 1, 1);
+        alt.AddProduction((int) KramdownConstants.EO_B, 0, 1);
+        alt.AddProduction((int) KramdownConstants.BLOCK, 0, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
+        pattern = new ProductionPattern((int) KramdownConstants.EO_B,
+                                        "EoB");
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.EOB_MARKER, 1, 1);
+        alt.AddProduction((int) KramdownConstants.EO_B, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.BLANK_LINE, 1, 1);
+        alt.AddProduction((int) KramdownConstants.EO_B, 0, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
         pattern = new ProductionPattern((int) KramdownConstants.ELEMENTS,
                                         "Elements");
         alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.BLOCK_QUOTE, 1, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.ORDERED_LIST, 1, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.UNORDERED_LIST, 1, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.FENCED_CODEBLOCK, 1, 1);
-        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.SETEXT_HEADER, 1, 1);
-        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.ATX_HEADER, 1, 1);
-        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
-        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
 
@@ -110,6 +136,14 @@ public class KramdownParser : RecursiveDescentParser {
                                         "Paragraph");
         alt = new ProductionPatternAlternative();
         alt.AddToken((int) KramdownConstants.TEXT_LINE, 1, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
+        pattern = new ProductionPattern((int) KramdownConstants.BLOCK_QUOTE,
+                                        "BlockQuote");
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.BLOCKQUOTE_CHAR, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
 
@@ -196,6 +230,24 @@ public class KramdownParser : RecursiveDescentParser {
         alt.AddToken((int) KramdownConstants.HEADERID_START, 1, 1);
         alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
         alt.AddToken((int) KramdownConstants.HEADERID_END, 1, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
+        pattern = new ProductionPattern((int) KramdownConstants.ORDERED_LIST,
+                                        "OrderedList");
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ORDERED_LIST_MARKER, 1, 1);
+        alt.AddToken((int) KramdownConstants.TEXT_LINE, 1, 1);
+        alt.AddProduction((int) KramdownConstants.ORDERED_LIST, 0, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
+        pattern = new ProductionPattern((int) KramdownConstants.UNORDERED_LIST,
+                                        "UnorderedList");
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.UNORDERED_LIST_MARKER, 1, 1);
+        alt.AddToken((int) KramdownConstants.TEXT_LINE, 1, 1);
+        alt.AddProduction((int) KramdownConstants.UNORDERED_LIST, 0, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
     }

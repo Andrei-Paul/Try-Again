@@ -11,4 +11,7 @@ java -jar grammatica-1.6/lib/grammatica-1.6.jar kramdown.grammar --parse kramdow
 REM PHARSE ARITHMETIC
 REM java -jar grammatica-1.6/lib/grammatica-1.6.jar arithmetic.grammar --parse arithmetic.txt
 
+REM PHARSE GRAMMATICA
+REM java -jar grammatica-1.6/lib/grammatica-1.6.jar grammar.grammar --parse kramdown.grammar
+
 REM pause

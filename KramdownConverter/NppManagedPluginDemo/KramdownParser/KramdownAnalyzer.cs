@@ -65,8 +65,8 @@ public abstract class KramdownAnalyzer : Analyzer {
         case (int) KramdownConstants.HEADERID_END:
             EnterHeaderidEnd((Token) node);
             break;
-        case (int) KramdownConstants.BLOCKQUOTE:
-            EnterBlockquote((Token) node);
+        case (int) KramdownConstants.BLOCKQUOTE_CHAR:
+            EnterBlockquoteChar((Token) node);
             break;
         case (int) KramdownConstants.FENCED_CODEBLOCK_MARKER:
             EnterFencedCodeblockMarker((Token) node);
@@ -92,12 +92,6 @@ public abstract class KramdownAnalyzer : Analyzer {
         case (int) KramdownConstants.TAB:
             EnterTab((Token) node);
             break;
-        case (int) KramdownConstants.NUMBER:
-            EnterNumber((Token) node);
-            break;
-        case (int) KramdownConstants.ESCAPE:
-            EnterEscape((Token) node);
-            break;
         case (int) KramdownConstants.DEFINITION_MARKER:
             EnterDefinitionMarker((Token) node);
             break;
@@ -113,14 +107,38 @@ public abstract class KramdownAnalyzer : Analyzer {
         case (int) KramdownConstants.TEXT_LINE:
             EnterTextLine((Token) node);
             break;
+        case (int) KramdownConstants.BLANK_LINE:
+            EnterBlankLine((Token) node);
+            break;
         case (int) KramdownConstants.NON_WHITESPACE:
             EnterNonWhitespace((Token) node);
+            break;
+        case (int) KramdownConstants.LETTER:
+            EnterLetter((Token) node);
+            break;
+        case (int) KramdownConstants.DIGIT:
+            EnterDigit((Token) node);
+            break;
+        case (int) KramdownConstants.EOL:
+            EnterEol((Token) node);
+            break;
+        case (int) KramdownConstants.WHITESPACE:
+            EnterWhitespace((Token) node);
+            break;
+        case (int) KramdownConstants.BLOCK:
+            EnterBlock((Production) node);
+            break;
+        case (int) KramdownConstants.EO_B:
+            EnterEoB((Production) node);
             break;
         case (int) KramdownConstants.ELEMENTS:
             EnterElements((Production) node);
             break;
         case (int) KramdownConstants.PARAGRAPH:
             EnterParagraph((Production) node);
+            break;
+        case (int) KramdownConstants.BLOCK_QUOTE:
+            EnterBlockQuote((Production) node);
             break;
         case (int) KramdownConstants.FENCED_CODEBLOCK:
             EnterFencedCodeblock((Production) node);
@@ -139,6 +157,12 @@ public abstract class KramdownAnalyzer : Analyzer {
             break;
         case (int) KramdownConstants.HEADER_ID:
             EnterHeaderId((Production) node);
+            break;
+        case (int) KramdownConstants.ORDERED_LIST:
+            EnterOrderedList((Production) node);
+            break;
+        case (int) KramdownConstants.UNORDERED_LIST:
+            EnterUnorderedList((Production) node);
             break;
         }
     }
@@ -178,8 +202,8 @@ public abstract class KramdownAnalyzer : Analyzer {
             return ExitHeaderidStart((Token) node);
         case (int) KramdownConstants.HEADERID_END:
             return ExitHeaderidEnd((Token) node);
-        case (int) KramdownConstants.BLOCKQUOTE:
-            return ExitBlockquote((Token) node);
+        case (int) KramdownConstants.BLOCKQUOTE_CHAR:
+            return ExitBlockquoteChar((Token) node);
         case (int) KramdownConstants.FENCED_CODEBLOCK_MARKER:
             return ExitFencedCodeblockMarker((Token) node);
         case (int) KramdownConstants.EOB_MARKER:
@@ -196,10 +220,6 @@ public abstract class KramdownAnalyzer : Analyzer {
             return ExitOrderedListMarker((Token) node);
         case (int) KramdownConstants.TAB:
             return ExitTab((Token) node);
-        case (int) KramdownConstants.NUMBER:
-            return ExitNumber((Token) node);
-        case (int) KramdownConstants.ESCAPE:
-            return ExitEscape((Token) node);
         case (int) KramdownConstants.DEFINITION_MARKER:
             return ExitDefinitionMarker((Token) node);
         case (int) KramdownConstants.TABLE_ROW:
@@ -210,12 +230,28 @@ public abstract class KramdownAnalyzer : Analyzer {
             return ExitFooterSeparatorLine((Token) node);
         case (int) KramdownConstants.TEXT_LINE:
             return ExitTextLine((Token) node);
+        case (int) KramdownConstants.BLANK_LINE:
+            return ExitBlankLine((Token) node);
         case (int) KramdownConstants.NON_WHITESPACE:
             return ExitNonWhitespace((Token) node);
+        case (int) KramdownConstants.LETTER:
+            return ExitLetter((Token) node);
+        case (int) KramdownConstants.DIGIT:
+            return ExitDigit((Token) node);
+        case (int) KramdownConstants.EOL:
+            return ExitEol((Token) node);
+        case (int) KramdownConstants.WHITESPACE:
+            return ExitWhitespace((Token) node);
+        case (int) KramdownConstants.BLOCK:
+            return ExitBlock((Production) node);
+        case (int) KramdownConstants.EO_B:
+            return ExitEoB((Production) node);
         case (int) KramdownConstants.ELEMENTS:
             return ExitElements((Production) node);
         case (int) KramdownConstants.PARAGRAPH:
             return ExitParagraph((Production) node);
+        case (int) KramdownConstants.BLOCK_QUOTE:
+            return ExitBlockQuote((Production) node);
         case (int) KramdownConstants.FENCED_CODEBLOCK:
             return ExitFencedCodeblock((Production) node);
         case (int) KramdownConstants.SETEXT_HEADER:
@@ -228,6 +264,10 @@ public abstract class KramdownAnalyzer : Analyzer {
             return ExitAtxHeader((Production) node);
         case (int) KramdownConstants.HEADER_ID:
             return ExitHeaderId((Production) node);
+        case (int) KramdownConstants.ORDERED_LIST:
+            return ExitOrderedList((Production) node);
+        case (int) KramdownConstants.UNORDERED_LIST:
+            return ExitUnorderedList((Production) node);
         }
         return node;
     }
@@ -244,11 +284,20 @@ public abstract class KramdownAnalyzer : Analyzer {
      */
     public override void Child(Production node, Node child) {
         switch (node.Id) {
+        case (int) KramdownConstants.BLOCK:
+            ChildBlock(node, child);
+            break;
+        case (int) KramdownConstants.EO_B:
+            ChildEoB(node, child);
+            break;
         case (int) KramdownConstants.ELEMENTS:
             ChildElements(node, child);
             break;
         case (int) KramdownConstants.PARAGRAPH:
             ChildParagraph(node, child);
+            break;
+        case (int) KramdownConstants.BLOCK_QUOTE:
+            ChildBlockQuote(node, child);
             break;
         case (int) KramdownConstants.FENCED_CODEBLOCK:
             ChildFencedCodeblock(node, child);
@@ -267,6 +316,12 @@ public abstract class KramdownAnalyzer : Analyzer {
             break;
         case (int) KramdownConstants.HEADER_ID:
             ChildHeaderId(node, child);
+            break;
+        case (int) KramdownConstants.ORDERED_LIST:
+            ChildOrderedList(node, child);
+            break;
+        case (int) KramdownConstants.UNORDERED_LIST:
+            ChildUnorderedList(node, child);
             break;
         }
     }
@@ -565,7 +620,7 @@ public abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
-    public virtual void EnterBlockquote(Token node) {
+    public virtual void EnterBlockquoteChar(Token node) {
     }
 
     /**
@@ -579,7 +634,7 @@ public abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
-    public virtual Node ExitBlockquote(Token node) {
+    public virtual Node ExitBlockquoteChar(Token node) {
         return node;
     }
 
@@ -799,58 +854,6 @@ public abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
-    public virtual void EnterNumber(Token node) {
-    }
-
-    /**
-     * <summary>Called when exiting a parse tree node.</summary>
-     *
-     * <param name='node'>the node being exited</param>
-     *
-     * <returns>the node to add to the parse tree, or
-     *          null if no parse tree should be created</returns>
-     *
-     * <exception cref='ParseException'>if the node analysis
-     * discovered errors</exception>
-     */
-    public virtual Node ExitNumber(Token node) {
-        return node;
-    }
-
-    /**
-     * <summary>Called when entering a parse tree node.</summary>
-     *
-     * <param name='node'>the node being entered</param>
-     *
-     * <exception cref='ParseException'>if the node analysis
-     * discovered errors</exception>
-     */
-    public virtual void EnterEscape(Token node) {
-    }
-
-    /**
-     * <summary>Called when exiting a parse tree node.</summary>
-     *
-     * <param name='node'>the node being exited</param>
-     *
-     * <returns>the node to add to the parse tree, or
-     *          null if no parse tree should be created</returns>
-     *
-     * <exception cref='ParseException'>if the node analysis
-     * discovered errors</exception>
-     */
-    public virtual Node ExitEscape(Token node) {
-        return node;
-    }
-
-    /**
-     * <summary>Called when entering a parse tree node.</summary>
-     *
-     * <param name='node'>the node being entered</param>
-     *
-     * <exception cref='ParseException'>if the node analysis
-     * discovered errors</exception>
-     */
     public virtual void EnterDefinitionMarker(Token node) {
     }
 
@@ -981,6 +984,32 @@ public abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
+    public virtual void EnterBlankLine(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitBlankLine(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
     public virtual void EnterNonWhitespace(Token node) {
     }
 
@@ -997,6 +1026,190 @@ public abstract class KramdownAnalyzer : Analyzer {
      */
     public virtual Node ExitNonWhitespace(Token node) {
         return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterLetter(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitLetter(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterDigit(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitDigit(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterEol(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitEol(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterWhitespace(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitWhitespace(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterBlock(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitBlock(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildBlock(Production node, Node child) {
+        node.AddChild(child);
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterEoB(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitEoB(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildEoB(Production node, Node child) {
+        node.AddChild(child);
     }
 
     /**
@@ -1076,6 +1289,46 @@ public abstract class KramdownAnalyzer : Analyzer {
      * discovered errors</exception>
      */
     public virtual void ChildParagraph(Production node, Node child) {
+        node.AddChild(child);
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterBlockQuote(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitBlockQuote(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildBlockQuote(Production node, Node child) {
         node.AddChild(child);
     }
 
@@ -1316,6 +1569,86 @@ public abstract class KramdownAnalyzer : Analyzer {
      * discovered errors</exception>
      */
     public virtual void ChildHeaderId(Production node, Node child) {
+        node.AddChild(child);
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterOrderedList(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitOrderedList(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildOrderedList(Production node, Node child) {
+        node.AddChild(child);
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterUnorderedList(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitUnorderedList(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildUnorderedList(Production node, Node child) {
         node.AddChild(child);
     }
 }

@@ -114,8 +114,8 @@ public class KramdownTokenizer : Tokenizer {
                                    "}");
         AddPattern(pattern);
 
-        pattern = new TokenPattern((int) KramdownConstants.BLOCKQUOTE,
-                                   "BLOCKQUOTE",
+        pattern = new TokenPattern((int) KramdownConstants.BLOCKQUOTE_CHAR,
+                                   "BLOCKQUOTE_CHAR",
                                    TokenPattern.PatternType.STRING,
                                    ">");
         AddPattern(pattern);
@@ -153,31 +153,19 @@ public class KramdownTokenizer : Tokenizer {
         pattern = new TokenPattern((int) KramdownConstants.UNORDERED_LIST_MARKER,
                                    "UNORDERED_LIST_MARKER",
                                    TokenPattern.PatternType.STRING,
-                                   "<<[+-*]>>");
+                                   "<<[+|-|*]>>");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.ORDERED_LIST_MARKER,
                                    "ORDERED_LIST_MARKER",
                                    TokenPattern.PatternType.REGEXP,
-                                   "[0-9]\\.");
+                                   "[0-9]+");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.TAB,
                                    "TAB",
                                    TokenPattern.PatternType.STRING,
                                    "\\t");
-        AddPattern(pattern);
-
-        pattern = new TokenPattern((int) KramdownConstants.NUMBER,
-                                   "NUMBER",
-                                   TokenPattern.PatternType.REGEXP,
-                                   "[0-9]+");
-        AddPattern(pattern);
-
-        pattern = new TokenPattern((int) KramdownConstants.ESCAPE,
-                                   "ESCAPE",
-                                   TokenPattern.PatternType.STRING,
-                                   "\\");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.DEFINITION_MARKER,
@@ -207,20 +195,26 @@ public class KramdownTokenizer : Tokenizer {
         pattern = new TokenPattern((int) KramdownConstants.TEXT_LINE,
                                    "TEXT_LINE",
                                    TokenPattern.PatternType.REGEXP,
-                                   ".+");
+                                   "[^ #>-+*].+");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.NEW_LINE,
                                    "NEW_LINE",
                                    TokenPattern.PatternType.REGEXP,
-                                   "[\\r\\n]*");
+                                   "[\\r]?[\\n]{1}");
         pattern.Ignore = true;
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.BLANK_LINE,
+                                   "BLANK_LINE",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[\\r]?[\\n]{1}[ \\t]*[\\r]?[\\n]{1}");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.IGNORE_WHITESPACE,
                                    "IGNORE_WHITESPACE",
                                    TokenPattern.PatternType.REGEXP,
-                                   "[\\s]*");
+                                   "[\\t ]*");
         pattern.Ignore = true;
         AddPattern(pattern);
 
@@ -228,6 +222,30 @@ public class KramdownTokenizer : Tokenizer {
                                    "NON_WHITESPACE",
                                    TokenPattern.PatternType.REGEXP,
                                    "[\\S]");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.LETTER,
+                                   "LETTER",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[a-zA-Z]");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.DIGIT,
+                                   "DIGIT",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[0-9]");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.EOL,
+                                   "EOL",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[\\n][\\r]?");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.WHITESPACE,
+                                   "WHITESPACE",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[ \\t]+");
         AddPattern(pattern);
     }
 }
