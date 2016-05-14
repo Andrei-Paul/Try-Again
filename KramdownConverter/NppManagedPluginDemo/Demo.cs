@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Kbg.NppPluginNET;
 
+using System.Text.RegularExpressions;
+
 namespace Kbg.NppPluginNET
 {
 	/// <summary>
@@ -88,7 +90,8 @@ namespace Kbg.Demo.Namespace
             //            ShortcutKey *shortcut,                // optional. Define a shortcut to trigger this command
             //            bool check0nInit                      // optional. Make this menu item be checked visually
             //            );
-            PluginBase.SetCommand(0, "Hello Notepad++", hello);
+            PluginBase.SetCommand(0, "Convert Kramdown to HTML", convert);
+            PluginBase.SetCommand(20, "Hello Notepad++", hello);
             PluginBase.SetCommand(1, "Hello (with FX)", helloFX);
             PluginBase.SetCommand(2, "What is Notepad++?", WhatIsNpp);
 
@@ -133,6 +136,31 @@ namespace Kbg.Demo.Namespace
         #endregion
 
         #region " Menu functions "
+
+
+        static void convert()
+        {
+            new Thread(callbackConvert).Start();
+        }
+
+        static void callbackConvert()
+        {
+
+            IntPtr curScintilla = PluginBase.GetCurrentScintilla();
+            String content = GetDocumentText(curScintilla);
+            Win32.SendMessage(curScintilla, SciMsg.SCI_APPENDTEXT, content.Length, content);
+
+ 
+        }
+
+        public static string GetDocumentText(IntPtr curScintilla)
+        {
+            int length = (int)Win32.SendMessage(curScintilla, SciMsg.SCI_GETLENGTH, 0, 0) + 1;
+            StringBuilder sb = new StringBuilder(length);
+            Win32.SendMessage(curScintilla, SciMsg.SCI_GETTEXT, length, sb);
+            return sb.ToString();
+        }
+
         static void hello()
         {
             // Open a new document
