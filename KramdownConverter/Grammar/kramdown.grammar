@@ -7,7 +7,7 @@
 
 GRAMMARTYPE = "LL"
 
-DESCRIPTION = "A grammar for Kramdown. The grammar is LL(1),
+DESCRIPTION = "A grammar for Kramdown. The grammar is LL(5),
                meaning that it is best read with a recursive descent parser."
 
 AUTHOR      = "Andrei Ghitea"
@@ -42,7 +42,7 @@ ATX_HEADER_END               = <<[#]*>>
 HEADERID_START               = "{#"
 HEADERID_END                 = "}"
 
-BLOCKQUOTE                   = ">"
+BLOCKQUOTE_CHAR              = ">"
 FENCED_CODEBLOCK_MARKER      = <<[~]{3,}>>
 
 EOB_MARKER                   = "^"
@@ -51,14 +51,10 @@ IAL_MARKER                   = ":"
 LEFT_BRACE                   = "{"
 RIGHT_BRACE                  = "}"
 
-UNORDERED_LIST_MARKER        = "<<[+-*]>>"
-ORDERED_LIST_MARKER          = <<[0-9]\.>>
+UNORDERED_LIST_MARKER        = "<<[+|-|*]>>"
+ORDERED_LIST_MARKER          = <<[0-9]+>>
 
 TAB                          = "\t"
-
-NUMBER                       = <<[0-9]+>>
-
-ESCAPE                       = "\"
 
 DEFINITION_MARKER            = ":"
 
@@ -66,20 +62,37 @@ TABLE_ROW                    = "|"
 SEPARATOR_LINE               = "-"
 FOOTER_SEPARATOR_LINE        = "="
 
-TEXT_LINE                    = <<.+>>
-NEW_LINE                     = <<[\r\n]*>> %ignore%
+TEXT_LINE                    = <<[^ #>-+*].+>>
+NEW_LINE                     = <<[\r]?[\n]{1}>> %ignore%
 
-IGNORE_WHITESPACE            = <<[\s]*>> %ignore%
+BLANK_LINE                   = <<[\r]?[\n]{1}[ \t]*[\r]?[\n]{1}>>
+
+IGNORE_WHITESPACE            = <<[\t ]*>> %ignore%
 NON_WHITESPACE               = <<[\S]>>
+
+LETTER              = <<[a-zA-Z]>>
+DIGIT               = <<[0-9]>>
+EOL                 = <<[\n][\r]?>>
+WHITESPACE          = <<[ \t]+>>
 
 %productions%
 
-Elements = FencedCodeblock [Elements]
-		 | SetextHeader [Elements]
-		 | AtxHeader [Elements]
-		 | Paragraph [Elements] ;
+Block = Elements [EoB] [Block] ;
+
+EoB = EOB_MARKER [EoB]
+    | BLANK_LINE [EoB] ;
+
+Elements = BlockQuote
+         | OrderedList
+         | UnorderedList
+         | FencedCodeblock
+		 | SetextHeader
+		 | AtxHeader
+		 | Paragraph ;
 
 Paragraph = TEXT_LINE ;
+
+BlockQuote = BLOCKQUOTE_CHAR Paragraph ;
 
 FencedCodeblock = FENCED_CODEBLOCK_MARKER Paragraph FENCED_CODEBLOCK_MARKER ;
 
@@ -98,3 +111,6 @@ AtxHeader = ATX_HEADER_L1 Paragraph [ATX_HEADER_END] [HeaderId]
           | ATX_HEADER_L6 Paragraph [ATX_HEADER_END] [HeaderId] ;
 
 HeaderId = HEADERID_START Paragraph HEADERID_END ;
+
+OrderedList = ORDERED_LIST_MARKER TEXT_LINE [OrderedList] ;
+UnorderedList = UNORDERED_LIST_MARKER TEXT_LINE [UnorderedList] ;
