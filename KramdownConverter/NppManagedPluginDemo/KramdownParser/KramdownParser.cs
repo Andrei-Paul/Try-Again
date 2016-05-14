@@ -21,7 +21,7 @@ using PerCederberg.Grammatica.Runtime;
 /**
  * <remarks>A token stream parser.</remarks>
  */
-internal class KramdownParser : RecursiveDescentParser {
+public class KramdownParser : RecursiveDescentParser {
 
     /**
      * <summary>An enumeration with the generated production node
@@ -89,15 +89,19 @@ internal class KramdownParser : RecursiveDescentParser {
         pattern = new ProductionPattern((int) KramdownConstants.ELEMENTS,
                                         "Elements");
         alt = new ProductionPatternAlternative();
-        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
-        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
-        pattern.AddAlternative(alt);
-        alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.FENCED_CODEBLOCK, 1, 1);
         alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.SETEXT_HEADER, 1, 1);
+        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.ATX_HEADER, 1, 1);
+        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
         alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
@@ -132,6 +136,7 @@ internal class KramdownParser : RecursiveDescentParser {
                                         "SetextFirstLevel");
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
         alt.AddToken((int) KramdownConstants.FIRST_HEADER_MARKER, 1, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
@@ -140,7 +145,57 @@ internal class KramdownParser : RecursiveDescentParser {
                                         "SetextSecondLevel");
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
         alt.AddToken((int) KramdownConstants.SECOND_HEADER_MARKER, 1, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
+        pattern = new ProductionPattern((int) KramdownConstants.ATX_HEADER,
+                                        "AtxHeader");
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_L1, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_END, 0, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_L2, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_END, 0, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_L3, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_END, 0, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_L4, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_END, 0, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_L5, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_END, 0, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_L6, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.ATX_HEADER_END, 0, 1);
+        alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        pattern.AddAlternative(alt);
+        AddPattern(pattern);
+
+        pattern = new ProductionPattern((int) KramdownConstants.HEADER_ID,
+                                        "HeaderId");
+        alt = new ProductionPatternAlternative();
+        alt.AddToken((int) KramdownConstants.HEADERID_START, 1, 1);
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
+        alt.AddToken((int) KramdownConstants.HEADERID_END, 1, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
     }

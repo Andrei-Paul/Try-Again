@@ -18,7 +18,7 @@
  * <remarks>An enumeration with token and production node
  * constants.</remarks>
  */
-internal enum KramdownConstants {
+public enum KramdownConstants {
     FIRST_HEADER_MARKER = 1001,
     SECOND_HEADER_MARKER = 1002,
     ATX_HEADER_L1 = 1003,
@@ -47,6 +47,8 @@ internal enum KramdownConstants {
     FOOTER_SEPARATOR_LINE = 1026,
     TEXT_LINE = 1027,
     NEW_LINE = 1028,
+    IGNORE_WHITESPACE = 1029,
+    NON_WHITESPACE = 1030,
     ELEMENTS = 2001,
     PARAGRAPH = 2002,
     FENCED_CODEBLOCK = 2003,

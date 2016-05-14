@@ -21,7 +21,7 @@ using PerCederberg.Grammatica.Runtime;
 /**
  * <remarks>A character stream tokenizer.</remarks>
  */
-internal class KramdownTokenizer : Tokenizer {
+public class KramdownTokenizer : Tokenizer {
 
     /**
      * <summary>Creates a new tokenizer for the specified input
@@ -60,10 +60,58 @@ internal class KramdownTokenizer : Tokenizer {
                                    "[-]+");
         AddPattern(pattern);
 
-        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_CHAR,
-                                   "ATX_HEADER_CHAR",
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_L1,
+                                   "ATX_HEADER_L1",
                                    TokenPattern.PatternType.STRING,
                                    "#");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_L2,
+                                   "ATX_HEADER_L2",
+                                   TokenPattern.PatternType.STRING,
+                                   "##");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_L3,
+                                   "ATX_HEADER_L3",
+                                   TokenPattern.PatternType.STRING,
+                                   "###");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_L4,
+                                   "ATX_HEADER_L4",
+                                   TokenPattern.PatternType.STRING,
+                                   "####");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_L5,
+                                   "ATX_HEADER_L5",
+                                   TokenPattern.PatternType.STRING,
+                                   "#####");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_L6,
+                                   "ATX_HEADER_L6",
+                                   TokenPattern.PatternType.STRING,
+                                   "######");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.ATX_HEADER_END,
+                                   "ATX_HEADER_END",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[#]*");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.HEADERID_START,
+                                   "HEADERID_START",
+                                   TokenPattern.PatternType.STRING,
+                                   "{#");
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.HEADERID_END,
+                                   "HEADERID_END",
+                                   TokenPattern.PatternType.STRING,
+                                   "}");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.BLOCKQUOTE,
@@ -159,14 +207,27 @@ internal class KramdownTokenizer : Tokenizer {
         pattern = new TokenPattern((int) KramdownConstants.TEXT_LINE,
                                    "TEXT_LINE",
                                    TokenPattern.PatternType.REGEXP,
-                                   "\\G.+");
+                                   ".+");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.NEW_LINE,
                                    "NEW_LINE",
                                    TokenPattern.PatternType.REGEXP,
-                                   "[\\n\\r]*");
+                                   "[\\r\\n]*");
         pattern.Ignore = true;
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.IGNORE_WHITESPACE,
+                                   "IGNORE_WHITESPACE",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[\\s]*");
+        pattern.Ignore = true;
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.NON_WHITESPACE,
+                                   "NON_WHITESPACE",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[\\S]");
         AddPattern(pattern);
     }
 }

@@ -21,7 +21,7 @@ using PerCederberg.Grammatica.Runtime;
 /**
  * <remarks>A character stream tokenizer.</remarks>
  */
-internal class KramdownTokenizer : Tokenizer {
+public class KramdownTokenizer : Tokenizer {
 
     /**
      * <summary>Creates a new tokenizer for the specified input
@@ -207,7 +207,7 @@ internal class KramdownTokenizer : Tokenizer {
         pattern = new TokenPattern((int) KramdownConstants.TEXT_LINE,
                                    "TEXT_LINE",
                                    TokenPattern.PatternType.REGEXP,
-                                   "\\G.+");
+                                   ".+");
         AddPattern(pattern);
 
         pattern = new TokenPattern((int) KramdownConstants.NEW_LINE,
@@ -215,6 +215,19 @@ internal class KramdownTokenizer : Tokenizer {
                                    TokenPattern.PatternType.REGEXP,
                                    "[\\r\\n]*");
         pattern.Ignore = true;
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.IGNORE_WHITESPACE,
+                                   "IGNORE_WHITESPACE",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[\\s]*");
+        pattern.Ignore = true;
+        AddPattern(pattern);
+
+        pattern = new TokenPattern((int) KramdownConstants.NON_WHITESPACE,
+                                   "NON_WHITESPACE",
+                                   TokenPattern.PatternType.REGEXP,
+                                   "[\\S]");
         AddPattern(pattern);
     }
 }

@@ -21,7 +21,7 @@ using PerCederberg.Grammatica.Runtime;
 /**
  * <remarks>A token stream parser.</remarks>
  */
-internal class KramdownParser : RecursiveDescentParser {
+public class KramdownParser : RecursiveDescentParser {
 
     /**
      * <summary>An enumeration with the generated production node
@@ -89,15 +89,19 @@ internal class KramdownParser : RecursiveDescentParser {
         pattern = new ProductionPattern((int) KramdownConstants.ELEMENTS,
                                         "Elements");
         alt = new ProductionPatternAlternative();
-        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
-        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
-        pattern.AddAlternative(alt);
-        alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.FENCED_CODEBLOCK, 1, 1);
         alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.SETEXT_HEADER, 1, 1);
+        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.ATX_HEADER, 1, 1);
+        alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
+        pattern.AddAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
         alt.AddProduction((int) KramdownConstants.ELEMENTS, 0, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
@@ -132,8 +136,8 @@ internal class KramdownParser : RecursiveDescentParser {
                                         "SetextFirstLevel");
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
-        alt.AddToken((int) KramdownConstants.FIRST_HEADER_MARKER, 1, 1);
         alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        alt.AddToken((int) KramdownConstants.FIRST_HEADER_MARKER, 1, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
 
@@ -141,8 +145,8 @@ internal class KramdownParser : RecursiveDescentParser {
                                         "SetextSecondLevel");
         alt = new ProductionPatternAlternative();
         alt.AddProduction((int) KramdownConstants.PARAGRAPH, 1, 1);
-        alt.AddToken((int) KramdownConstants.SECOND_HEADER_MARKER, 1, 1);
         alt.AddProduction((int) KramdownConstants.HEADER_ID, 0, 1);
+        alt.AddToken((int) KramdownConstants.SECOND_HEADER_MARKER, 1, 1);
         pattern.AddAlternative(alt);
         AddPattern(pattern);
 

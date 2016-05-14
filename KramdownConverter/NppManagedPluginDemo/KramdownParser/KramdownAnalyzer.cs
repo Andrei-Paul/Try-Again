@@ -20,7 +20,7 @@ using PerCederberg.Grammatica.Runtime;
  * <remarks>A class providing callback methods for the
  * parser.</remarks>
  */
-internal abstract class KramdownAnalyzer : Analyzer {
+public abstract class KramdownAnalyzer : Analyzer {
 
     /**
      * <summary>Called when entering a parse tree node.</summary>
@@ -38,8 +38,32 @@ internal abstract class KramdownAnalyzer : Analyzer {
         case (int) KramdownConstants.SECOND_HEADER_MARKER:
             EnterSecondHeaderMarker((Token) node);
             break;
-        case (int) KramdownConstants.ATX_HEADER_CHAR:
-            EnterAtxHeaderChar((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L1:
+            EnterAtxHeaderL1((Token) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER_L2:
+            EnterAtxHeaderL2((Token) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER_L3:
+            EnterAtxHeaderL3((Token) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER_L4:
+            EnterAtxHeaderL4((Token) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER_L5:
+            EnterAtxHeaderL5((Token) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER_L6:
+            EnterAtxHeaderL6((Token) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER_END:
+            EnterAtxHeaderEnd((Token) node);
+            break;
+        case (int) KramdownConstants.HEADERID_START:
+            EnterHeaderidStart((Token) node);
+            break;
+        case (int) KramdownConstants.HEADERID_END:
+            EnterHeaderidEnd((Token) node);
             break;
         case (int) KramdownConstants.BLOCKQUOTE:
             EnterBlockquote((Token) node);
@@ -89,6 +113,9 @@ internal abstract class KramdownAnalyzer : Analyzer {
         case (int) KramdownConstants.TEXT_LINE:
             EnterTextLine((Token) node);
             break;
+        case (int) KramdownConstants.NON_WHITESPACE:
+            EnterNonWhitespace((Token) node);
+            break;
         case (int) KramdownConstants.ELEMENTS:
             EnterElements((Production) node);
             break;
@@ -106,6 +133,12 @@ internal abstract class KramdownAnalyzer : Analyzer {
             break;
         case (int) KramdownConstants.SETEXT_SECOND_LEVEL:
             EnterSetextSecondLevel((Production) node);
+            break;
+        case (int) KramdownConstants.ATX_HEADER:
+            EnterAtxHeader((Production) node);
+            break;
+        case (int) KramdownConstants.HEADER_ID:
+            EnterHeaderId((Production) node);
             break;
         }
     }
@@ -127,8 +160,24 @@ internal abstract class KramdownAnalyzer : Analyzer {
             return ExitFirstHeaderMarker((Token) node);
         case (int) KramdownConstants.SECOND_HEADER_MARKER:
             return ExitSecondHeaderMarker((Token) node);
-        case (int) KramdownConstants.ATX_HEADER_CHAR:
-            return ExitAtxHeaderChar((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L1:
+            return ExitAtxHeaderL1((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L2:
+            return ExitAtxHeaderL2((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L3:
+            return ExitAtxHeaderL3((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L4:
+            return ExitAtxHeaderL4((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L5:
+            return ExitAtxHeaderL5((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_L6:
+            return ExitAtxHeaderL6((Token) node);
+        case (int) KramdownConstants.ATX_HEADER_END:
+            return ExitAtxHeaderEnd((Token) node);
+        case (int) KramdownConstants.HEADERID_START:
+            return ExitHeaderidStart((Token) node);
+        case (int) KramdownConstants.HEADERID_END:
+            return ExitHeaderidEnd((Token) node);
         case (int) KramdownConstants.BLOCKQUOTE:
             return ExitBlockquote((Token) node);
         case (int) KramdownConstants.FENCED_CODEBLOCK_MARKER:
@@ -161,6 +210,8 @@ internal abstract class KramdownAnalyzer : Analyzer {
             return ExitFooterSeparatorLine((Token) node);
         case (int) KramdownConstants.TEXT_LINE:
             return ExitTextLine((Token) node);
+        case (int) KramdownConstants.NON_WHITESPACE:
+            return ExitNonWhitespace((Token) node);
         case (int) KramdownConstants.ELEMENTS:
             return ExitElements((Production) node);
         case (int) KramdownConstants.PARAGRAPH:
@@ -173,6 +224,10 @@ internal abstract class KramdownAnalyzer : Analyzer {
             return ExitSetextFirstLevel((Production) node);
         case (int) KramdownConstants.SETEXT_SECOND_LEVEL:
             return ExitSetextSecondLevel((Production) node);
+        case (int) KramdownConstants.ATX_HEADER:
+            return ExitAtxHeader((Production) node);
+        case (int) KramdownConstants.HEADER_ID:
+            return ExitHeaderId((Production) node);
         }
         return node;
     }
@@ -206,6 +261,12 @@ internal abstract class KramdownAnalyzer : Analyzer {
             break;
         case (int) KramdownConstants.SETEXT_SECOND_LEVEL:
             ChildSetextSecondLevel(node, child);
+            break;
+        case (int) KramdownConstants.ATX_HEADER:
+            ChildAtxHeader(node, child);
+            break;
+        case (int) KramdownConstants.HEADER_ID:
+            ChildHeaderId(node, child);
             break;
         }
     }
@@ -270,7 +331,7 @@ internal abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
-    public virtual void EnterAtxHeaderChar(Token node) {
+    public virtual void EnterAtxHeaderL1(Token node) {
     }
 
     /**
@@ -284,7 +345,215 @@ internal abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
-    public virtual Node ExitAtxHeaderChar(Token node) {
+    public virtual Node ExitAtxHeaderL1(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeaderL2(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeaderL2(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeaderL3(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeaderL3(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeaderL4(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeaderL4(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeaderL5(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeaderL5(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeaderL6(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeaderL6(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeaderEnd(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeaderEnd(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterHeaderidStart(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitHeaderidStart(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterHeaderidEnd(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitHeaderidEnd(Token node) {
         return node;
     }
 
@@ -712,6 +981,32 @@ internal abstract class KramdownAnalyzer : Analyzer {
      * <exception cref='ParseException'>if the node analysis
      * discovered errors</exception>
      */
+    public virtual void EnterNonWhitespace(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitNonWhitespace(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
     public virtual void EnterElements(Production node) {
     }
 
@@ -941,6 +1236,86 @@ internal abstract class KramdownAnalyzer : Analyzer {
      * discovered errors</exception>
      */
     public virtual void ChildSetextSecondLevel(Production node, Node child) {
+        node.AddChild(child);
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterAtxHeader(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitAtxHeader(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildAtxHeader(Production node, Node child) {
+        node.AddChild(child);
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterHeaderId(Production node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitHeaderId(Production node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when adding a child to a parse tree
+     * node.</summary>
+     *
+     * <param name='node'>the parent node</param>
+     * <param name='child'>the child node, or null</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void ChildHeaderId(Production node, Node child) {
         node.AddChild(child);
     }
 }

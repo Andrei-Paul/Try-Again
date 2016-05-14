@@ -20,7 +20,7 @@ using PerCederberg.Grammatica.Runtime;
  * <remarks>A class providing callback methods for the
  * parser.</remarks>
  */
-internal abstract class KramdownAnalyzer : Analyzer {
+public abstract class KramdownAnalyzer : Analyzer {
 
     /**
      * <summary>Called when entering a parse tree node.</summary>
@@ -112,6 +112,9 @@ internal abstract class KramdownAnalyzer : Analyzer {
             break;
         case (int) KramdownConstants.TEXT_LINE:
             EnterTextLine((Token) node);
+            break;
+        case (int) KramdownConstants.NON_WHITESPACE:
+            EnterNonWhitespace((Token) node);
             break;
         case (int) KramdownConstants.ELEMENTS:
             EnterElements((Production) node);
@@ -207,6 +210,8 @@ internal abstract class KramdownAnalyzer : Analyzer {
             return ExitFooterSeparatorLine((Token) node);
         case (int) KramdownConstants.TEXT_LINE:
             return ExitTextLine((Token) node);
+        case (int) KramdownConstants.NON_WHITESPACE:
+            return ExitNonWhitespace((Token) node);
         case (int) KramdownConstants.ELEMENTS:
             return ExitElements((Production) node);
         case (int) KramdownConstants.PARAGRAPH:
@@ -965,6 +970,32 @@ internal abstract class KramdownAnalyzer : Analyzer {
      * discovered errors</exception>
      */
     public virtual Node ExitTextLine(Token node) {
+        return node;
+    }
+
+    /**
+     * <summary>Called when entering a parse tree node.</summary>
+     *
+     * <param name='node'>the node being entered</param>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual void EnterNonWhitespace(Token node) {
+    }
+
+    /**
+     * <summary>Called when exiting a parse tree node.</summary>
+     *
+     * <param name='node'>the node being exited</param>
+     *
+     * <returns>the node to add to the parse tree, or
+     *          null if no parse tree should be created</returns>
+     *
+     * <exception cref='ParseException'>if the node analysis
+     * discovered errors</exception>
+     */
+    public virtual Node ExitNonWhitespace(Token node) {
         return node;
     }
 

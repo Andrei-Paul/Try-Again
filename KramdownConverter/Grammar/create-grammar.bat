@@ -1,5 +1,6 @@
 REM GENERATE CODE
-java -jar grammatica-1.6/lib/grammatica-1.6.jar kramdown.grammar --csoutput grammar.cs
+java -jar grammatica-1.6/lib/grammatica-1.6.jar kramdown.grammar --csoutput grammar.cs --cspublic
+copy grammar.cs\* ..\NppManagedPluginDemo\KramdownParser
 
 REM ANALYZE GRAMMAR
 java -jar grammatica-1.6/lib/grammatica-1.6.jar kramdown.grammar --debug

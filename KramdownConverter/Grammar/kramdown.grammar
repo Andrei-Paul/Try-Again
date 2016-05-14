@@ -66,33 +66,18 @@ TABLE_ROW                    = "|"
 SEPARATOR_LINE               = "-"
 FOOTER_SEPARATOR_LINE        = "="
 
-TEXT_LINE                    = <<\G.+>>
-NEW_LINE                      = <<[\r\n]*>> %ignore%
+TEXT_LINE                    = <<.+>>
+NEW_LINE                     = <<[\r\n]*>> %ignore%
 
-/*
- * Garbage from before
- */
-
-/*
-LEFT_PAREN                   = "("
-RIGHT_PAREN                  = ")"
-LEFT_BRACKET                 = "["
-RIGHT_BRACKET                = "]"
-
-QUESTION                     = "?"
-ASTERISK                     = "*"
-PLUS                         = "+"
-VERTICAL_BAR                 = "|"
-DOT                          = "."
-COMMA                        = ","
-CHAR                         = <<(\\.)|.>>
-*/
+IGNORE_WHITESPACE            = <<[\s]*>> %ignore%
+NON_WHITESPACE               = <<[\S]>>
 
 %productions%
 
-Elements = Paragraph [Elements]
-         | FencedCodeblock [Elements]
-		 | SetextHeader [Elements] ;
+Elements = FencedCodeblock [Elements]
+		 | SetextHeader [Elements]
+		 | AtxHeader [Elements]
+		 | Paragraph [Elements] ;
 
 Paragraph = TEXT_LINE ;
 
@@ -101,9 +86,9 @@ FencedCodeblock = FENCED_CODEBLOCK_MARKER Paragraph FENCED_CODEBLOCK_MARKER ;
 SetextHeader = SetextFirstLevel
              | SetextSecondLevel ;
 
-SetextFirstLevel = Paragraph FIRST_HEADER_MARKER [HeaderId] ;
+SetextFirstLevel = Paragraph [HeaderId] FIRST_HEADER_MARKER;
 
-SetextSecondLevel = Paragraph SECOND_HEADER_MARKER [HeaderId] ;
+SetextSecondLevel = Paragraph [HeaderId] SECOND_HEADER_MARKER;
 
 AtxHeader = ATX_HEADER_L1 Paragraph [ATX_HEADER_END] [HeaderId]
           | ATX_HEADER_L2 Paragraph [ATX_HEADER_END] [HeaderId]
@@ -113,39 +98,3 @@ AtxHeader = ATX_HEADER_L1 Paragraph [ATX_HEADER_END] [HeaderId]
           | ATX_HEADER_L6 Paragraph [ATX_HEADER_END] [HeaderId] ;
 
 HeaderId = HEADERID_START Paragraph HEADERID_END ;
-		  
-/*
-Expr = Term ["|" Expr] ;
-
-Term = Fact+ ;
-
-Fact = Atom [AtomModifier] ;
-
-Atom = CHAR
-     | NUMBER
-     | ","
-     | "."
-     | "(" Expr ")"
-     | "[" CharacterSet "]" ;
-
-AtomModifier = "?" ["?"]
-             | "*" ["?"]
-             | "+" ["?"]
-             | "{" NUMBER ["," [NUMBER]] "}" ["?"] ;
-
-CharacterSet = Character+ ;
-
-Character = CHAR
-          | NUMBER
-          | ","
-          | "."
-          | "|"
-          | "+"
-          | "*"
-          | "?"
-          | "{"
-          | "}"
-          | "("
-          | ")"
-          | "[" ;
-*/

@@ -1,6 +1,6 @@
  THIS IS PARAGRAPH 1
 
-THIS IS PARAGRAPH 2
+  THIS IS PARAGRAPH 2
 
 First Header 1
 ==============
@@ -15,9 +15,9 @@ THIS IS PARAGRAPH 3
 Fenced Code Block 1
 ~~~~
 
-Second Header 1 {#HeaderId1}
+Second Header 1 {# HeaderId1 }
 ---------------
 
-### Third Header ## {#HeaderId2}
+### Third Header ## {# HeaderId2 }
 
 THIS IS PARAGRAPH 6
