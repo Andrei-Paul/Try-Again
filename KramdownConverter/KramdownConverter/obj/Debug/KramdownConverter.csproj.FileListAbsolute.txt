@@ -1,0 +1,4 @@
+C:\Users\Iulia\Desktop\itec2016\KramdownNppPlugin\KramdownConverter\KramdownConverter\obj\Debug\KramdownConverter.csprojResolveAssemblyReference.cache
+C:\Users\Iulia\Desktop\itec2016\KramdownNppPlugin\KramdownConverter\KramdownConverter\obj\Debug\KramdownConverter.frmMyDlg.resources
+C:\Users\Iulia\Desktop\itec2016\KramdownNppPlugin\KramdownConverter\KramdownConverter\obj\Debug\KramdownConverter.Properties.Resources.resources
+C:\Users\Iulia\Desktop\itec2016\KramdownNppPlugin\KramdownConverter\KramdownConverter\obj\Debug\KramdownConverter.csproj.GenerateResource.Cache
