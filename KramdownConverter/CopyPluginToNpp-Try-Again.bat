@@ -1,3 +1,4 @@
+echo %USERNAME% > D:\cacat.txt
 IF "%USERNAME%" == "ghite" (GOTO ghite) ELSE (GOTO rest)
 GOTO end
 
