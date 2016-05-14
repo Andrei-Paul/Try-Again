@@ -117,11 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="star" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>star.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="star" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALEAAA
+        CxABrSO9dQAAAi5JREFUOE9j/P//PwMyuJXho8fEzdPIyMJm8p+FVebfn98Mf79+fvLn65cz/75+qtdf
+        dfISigaQATB8pzhi/d3yuP8XPdT/n9Jl+39SgwGMT+mw/j/rIPf/fKzj/7NhFuuR9YA1f79/k+NedfLj
+        a9E2cE0wzej0aVeV/yeDzR4fq8vhALseRIBsxqb5epzDfxBGN+QE0DXHPDTALmG4V51kCnI2Nhs/ntz/
+        /92J/f/3qEK8goyPuKn/P+SsYspwKy9oF8jP6AouOCsALYCAdbYKGPLHjPn/H7SR3sVwtyblCSzAQM59
+        2Fbw//nCCf9/PLkPN+DT4/v/H05uAMvBvHRCi+n/XjvZJwy3q5Lgpt+tiIdrwsU4XxYP99IuK8n/DDfL
+        YlGcdxGoABfYUxT/f6ocw/9tKpDw2GEq+p/hekHYE1A8I4fB/fn9GGZcmNOPovmEJuP/bYb8TxguxTrs
+        AiUSZANAoY8O7u1Y/3+NEiImDmmz/d+pzbGL4VKyhwkohSEbAAvAU331/0E2g8Drq+f/L1VEGLBdh/P/
+        Zg02E3BCAiVPcAqDxvXrdfP/r7CSBzt5vTLQz7by/0EumK8AMWAv0PZtGqyQhAQizk9o4AAlT1AKgxmy
+        Eujcw+oIG0FskAtAmrdosD6epsCMSMogQ0AYlDxBKQyUSEDxDDMMFGAgP4OcDbMZpgeeE2ECh21ldA/a
+        yq7fZyP9GBTPoKjaYcD3eIcO5/odGiy6MHUwGgAXSmAkz0Rr8AAAAABJRU5ErkJggg==
+</value>
   </data>
-  <data name="star_bmp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>star_bmp.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="star_bmp" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk1yAgAAAAAAAHIBAAAoAAAAEAAAABAAAAABAAgAAAAAAAAAAAARCwAAEQsAAE8AAABPAAAAAAAA////
+        ////AP//z9Xr/wAoyf8AJ8P/ACW8/wAktv8AI6//ACKs/wAiqf8AIaX/ACCf/wAelf8BKcj/AirI/wUs
+        yv8GLcr/BivC/wUotv8FKLT/Biu9/wgruf8JLLj/CSy3/w8zxv8OMLj/DzG2/xU1uP8ZOrr/GzzB/xs8
+        vv8eQM3/HkDI/x09wf8gQ9D/HT69/x89tv8kRcv/J0jR/yA9rv8fOqj/J0bE/yhIxv82U8n/OFbN/zxb
+        1v9AXtf/QF3S/0Fdz/9EYNL/UGvW/1Ju2v9Xctv/WHPc/1Zw1/9ed93/XXbc/1122f9feN3/Y3ve/2J6
+        2/9kfN3/X3bR/192z/9whuH/X3K8/4CT4f+Qoef/f47K/4+f3/+fruv/j5zQ/6+43v+/yfH/v8ju/9/k
+        +P/f4/L//////wICAgICIh8dHBoXAgICAgICAgIrKhkPBAQOEhgTAgICAgIsIQQECgUEBAULFRQCAgIt
+        JgQERykNCCVJDAQVEwICMQQEBEwBRUgBAwsEBBgCMCAEBARKAQEBAUkJBAQSFjcQBAQERgEBAQFIDQcE
+        Dhs6BAQEPwEBAQEBAUINBwQcPQQEOwEBAQEBAQEBQAYEHT4RBC9BREwBAU1DQS8EDyQ0JwQEBAQjAQEo
+        BAQEBBkeAjgEBAQEBEpLBgQEBAQqAgI2LgQEBAQvLwQEBAQhKwICAjwuBAQEBAQEBAQmLAICAgICNjgn
+        EQQEECAxLQICAgICAgICNTk9OjMyAgICAgI=
+</value>
   </data>
 </root>
