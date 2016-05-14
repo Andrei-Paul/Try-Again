@@ -1,3 +1,6 @@
+
+
+
 using System;
 using System.IO;
 using System.Text;
@@ -7,35 +10,36 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using Kbg.NppPluginNET;
 
-using System.Text.RegularExpressions;
+
+using Kbg.NppPluginNET;
+using PerCederberg.Grammatica.Runtime;
 
 namespace Kbg.NppPluginNET
 {
-	/// <summary>
-	/// Integration layer as the demo app uses the pluginfiles as soft-links files.
-	/// This is different to normal plugins that would use the project template and get the files directly.
-	/// </summary>
-	class Main
-	{
-		static internal void CommandMenuInit()
-		{
-			Kbg.Demo.Namespace.Main.CommandMenuInit();
-		}
+    /// <summary>
+    /// Integration layer as the demo app uses the pluginfiles as soft-links files.
+    /// This is different to normal plugins that would use the project template and get the files directly.
+    /// </summary>
+    class Main
+    {
+        static internal void CommandMenuInit()
+        {
+            Kbg.Demo.Namespace.Main.CommandMenuInit();
+        }
 
-		static internal void PluginCleanUp()
-		{
-			Kbg.Demo.Namespace.Main.PluginCleanUp();
-		}
+        static internal void PluginCleanUp()
+        {
+            Kbg.Demo.Namespace.Main.PluginCleanUp();
+        }
 
-		static internal void SetToolBarIcon()
-		{
-			Kbg.Demo.Namespace.Main.SetToolBarIcon();
-		}
+        static internal void SetToolBarIcon()
+        {
+            Kbg.Demo.Namespace.Main.SetToolBarIcon();
+        }
 
-		internal static string PluginName { get { return Kbg.Demo.Namespace.Main.PluginName; }}
-	}
+        internal static string PluginName { get { return Kbg.Demo.Namespace.Main.PluginName; } }
+    }
 }
 
 namespace Kbg.Demo.Namespace
@@ -61,7 +65,7 @@ namespace Kbg.Demo.Namespace
         {
             // Initialization of your plugin commands
             // You should fill your plugins commands here
- 
+
             //
             // Firstly we get the parameters from your plugin config file (if any)
             //
@@ -147,11 +151,53 @@ namespace Kbg.Demo.Namespace
         {
 
             IntPtr curScintilla = PluginBase.GetCurrentScintilla();
-            String content = GetDocumentText(curScintilla);
+            String content = GetKramdownContent(curScintilla);
+            //Node nodes = parseKramdown(content);
+
+            Parser parser = null;
+            KramdownAnalyzer A = null;
+            parser = new KramdownParser(new StringReader(content), A);
+            
+            Node node = parser.Parse();
+
             Win32.SendMessage(curScintilla, SciMsg.SCI_APPENDTEXT, content.Length, content);
 
- 
+            //Win32.SendMessage(curScintilla, SciMsg.SCI_APPENDTEXT, nodes[0].ToString().Length, nodes[0].ToString());
+
+
         }
+
+        public static Node parseKramdown(String KramdownContent)
+        {
+            Parser parser = null;
+            Node node = null;
+            //            parser = new KramdownParser(new StringReader(KramdownContent));
+            //            node = parser.Parse();
+
+            return node;
+        }
+
+        //public static void getHTMLContent(String KramdownContent)
+        //{
+        //    Parser parser = null;
+
+        //    parser = new KramdownParser(new StringReader(KramdownContent));
+        //    var htmlContent = parser.Parse();
+        //    var a = "asd";
+        //    //return htmlContent.ToString();
+        //}
+
+        //IntPtr curScintilla = PluginBase.GetCurrentScintilla();
+        public static string GetKramdownContent(IntPtr curScintilla)
+        {
+            int length = (int)Win32.SendMessage(curScintilla, SciMsg.SCI_GETLENGTH, 0, 0) + 1;
+            StringBuilder sb = new StringBuilder(length);
+            Win32.SendMessage(curScintilla, SciMsg.SCI_GETTEXT, length, sb);
+            return sb.ToString();
+        }
+
+
+
 
         public static string GetDocumentText(IntPtr curScintilla)
         {
@@ -179,22 +225,22 @@ namespace Kbg.Demo.Namespace
             IntPtr curScintilla = PluginBase.GetCurrentScintilla();
             int currentZoomLevel = (int)Win32.SendMessage(curScintilla, SciMsg.SCI_GETZOOM, 0, 0);
             int i = currentZoomLevel;
-            for (int j = 0 ; j < 4 ; j++)
-            {    
-                for ( ; i >= -10; i--)
+            for (int j = 0; j < 4; j++)
+            {
+                for (; i >= -10; i--)
                 {
                     Win32.SendMessage(curScintilla, SciMsg.SCI_SETZOOM, i, 0);
                     Thread.Sleep(30);
                 }
                 Thread.Sleep(100);
-                for ( ; i <= 20 ; i++)
+                for (; i <= 20; i++)
                 {
                     Thread.Sleep(30);
                     Win32.SendMessage(curScintilla, SciMsg.SCI_SETZOOM, i, 0);
                 }
                 Thread.Sleep(100);
             }
-            for ( ; i >= currentZoomLevel ; i--)
+            for (; i >= currentZoomLevel; i--)
             {
                 Thread.Sleep(30);
                 Win32.SendMessage(curScintilla, SciMsg.SCI_SETZOOM, i, 0);
@@ -272,7 +318,7 @@ namespace Kbg.Demo.Namespace
         }
         static void insertDateTime(bool longFormat)
         {
-            string dateTime = string.Format("{0} {1}", 
+            string dateTime = string.Format("{0} {1}",
                 DateTime.Now.ToShortTimeString(),
                 longFormat ? DateTime.Now.ToLongDateString() : DateTime.Now.ToShortDateString());
             Win32.SendMessage(PluginBase.GetCurrentScintilla(), SciMsg.SCI_REPLACESEL, 0, dateTime);
@@ -313,7 +359,7 @@ namespace Kbg.Demo.Namespace
                                 StringBuilder insertString = new StringBuilder("</");
 
                                 int pCur = size - 2;
-                                for (; (pCur > 0) && (buf[pCur] != '<') && (buf[pCur] != '>'); )
+                                for (; (pCur > 0) && (buf[pCur] != '<') && (buf[pCur] != '>');)
                                     pCur--;
 
                                 if (buf[pCur] == '<')
@@ -400,7 +446,7 @@ namespace Kbg.Demo.Namespace
                     g.DrawImage(tbBmp_tbTab, new Rectangle(0, 0, 16, 16), 0, 0, 16, 16, GraphicsUnit.Pixel, attr);
                     tbIcon = Icon.FromHandle(newBmp.GetHicon());
                 }
-                
+
                 NppTbData _nppTbData = new NppTbData();
                 _nppTbData.hClient = frmGoToLine.Handle;
                 _nppTbData.pszName = "Go To Line #";
@@ -435,4 +481,4 @@ namespace Kbg.Demo.Namespace
         }
         #endregion
     }
-}   
+}

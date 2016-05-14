@@ -81,7 +81,8 @@
             this.viewKramdownHTML.ScrollBarsEnabled = false;
             this.viewKramdownHTML.Size = new System.Drawing.Size(480, 316);
             this.viewKramdownHTML.TabIndex = 3;
-            this.viewKramdownHTML.Url = new System.Uri("https://google.ro", System.UriKind.Absolute);
+            //this.viewKramdownHTML.Url = new System.Uri("https://google.ro", System.UriKind.Absolute);
+            this.viewKramdownHTML.DocumentText = "<h4> asd </h4>";
             this.viewKramdownHTML.WebBrowserShortcutsEnabled = false;
             // 
             // frmGoToLine
