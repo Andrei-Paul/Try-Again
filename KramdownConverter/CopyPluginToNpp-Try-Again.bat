@@ -1,13 +1,11 @@
-echo %cd% > d:\cacat.txt
-REM IF %USERNAME% EQU ghite GOTO ghite ELSE GOTO rest
-REM 
-REM :ghite
-REM 	copy /B "Demo.dll" "D:\Applications\Notepad++\App\Notepad++\plugins"
-REM 	echo first >> d:\cacat.txt
-REM 	GOTO end
-REM 
-REM :rest
+IF "%USERNAME%" == "ghite" (GOTO ghite) ELSE (GOTO rest)
+GOTO end
+
+:ghite
 	copy /B "D:\Projects\Kaars\Software Development\C#\Try-Again\KramdownConverter\NppManagedPluginDemo\bin\Debug-Andrei\Demo.dll" "C:\Program Files (x86)\Notepad++\plugins"
+	GOTO end
+:rest
+	copy /B "C:\Users\Iulia\Desktop\itec2016\KramdownNppPlugin\KramdownConverter\NppManagedPluginDemo\bin\Debug-Iulia\Demo.dll" "C:\Program Files (x86)\Notepad++\plugins"
 	GOTO end
 
 :end
