@@ -1,6 +1,3 @@
-
-
-
 using System;
 using System.IO;
 using System.Text;
@@ -94,7 +91,7 @@ namespace Kbg.Demo.Namespace
             //            ShortcutKey *shortcut,                // optional. Define a shortcut to trigger this command
             //            bool check0nInit                      // optional. Make this menu item be checked visually
             //            );
-            PluginBase.SetCommand(0, "Convert Kramdown to HTML", convert);
+            PluginBase.SetCommand(0, "Convert Kramdown to HTML", ConvertKramdown);
             PluginBase.SetCommand(20, "Hello Notepad++", hello);
             PluginBase.SetCommand(1, "Hello (with FX)", helloFX);
             PluginBase.SetCommand(2, "What is Notepad++?", WhatIsNpp);
@@ -120,7 +117,7 @@ namespace Kbg.Demo.Namespace
 
             PluginBase.SetCommand(14, "---", null);
 
-            PluginBase.SetCommand(15, "Dockable Dialog Demo", DockableDlgDemo); idFrmGotToLine = 15;
+            PluginBase.SetCommand(15, "Dockable Dialog Demo", ConvertKramdown); idFrmGotToLine = 15;
         }
 
         static internal void SetToolBarIcon()
@@ -147,47 +144,50 @@ namespace Kbg.Demo.Namespace
             new Thread(callbackConvert).Start();
         }
 
+        static void callbackConvertRecursive(Node nodes, String indent)
+        {
+            int index = 0;
+            IntPtr curScintilla = PluginBase.GetCurrentScintilla();
+
+            for (index = 0; index < nodes.GetChildCount(); index ++)
+            {
+                Node child = nodes.GetChildAt(index);
+                String name = "\n" + indent + child.Name;
+
+                if(child is Token)
+                {
+                    name = name + " = " + (child as Token).GetImage();
+                }
+             
+             
+                callbackConvertRecursive(child, indent + "  ");
+            }
+        }
+
         static void callbackConvert()
         {
+            int index = 0;
 
             IntPtr curScintilla = PluginBase.GetCurrentScintilla();
             String content = GetKramdownContent(curScintilla);
-            //Node nodes = parseKramdown(content);
+            Node nodes = parseKramdown(content);
 
-            Parser parser = null;
-            KramdownAnalyzer A = null;
-            parser = new KramdownParser(new StringReader(content), A);
-            
-            Node node = parser.Parse();
+            int childrenNo = nodes.GetChildCount();
+            for(index=0;index < childrenNo; index++)
+            {
+                callbackConvertRecursive(nodes.GetChildAt(index), "");
 
-            Win32.SendMessage(curScintilla, SciMsg.SCI_APPENDTEXT, content.Length, content);
-
-            //Win32.SendMessage(curScintilla, SciMsg.SCI_APPENDTEXT, nodes[0].ToString().Length, nodes[0].ToString());
-
-
+            }
         }
 
         public static Node parseKramdown(String KramdownContent)
         {
             Parser parser = null;
-            Node node = null;
-            //            parser = new KramdownParser(new StringReader(KramdownContent));
-            //            node = parser.Parse();
-
+            parser = new KramdownParser(new StringReader(KramdownContent));
+            Node node = parser.Parse();
             return node;
         }
 
-        //public static void getHTMLContent(String KramdownContent)
-        //{
-        //    Parser parser = null;
-
-        //    parser = new KramdownParser(new StringReader(KramdownContent));
-        //    var htmlContent = parser.Parse();
-        //    var a = "asd";
-        //    //return htmlContent.ToString();
-        //}
-
-        //IntPtr curScintilla = PluginBase.GetCurrentScintilla();
         public static string GetKramdownContent(IntPtr curScintilla)
         {
             int length = (int)Win32.SendMessage(curScintilla, SciMsg.SCI_GETLENGTH, 0, 0) + 1;
@@ -195,8 +195,6 @@ namespace Kbg.Demo.Namespace
             Win32.SendMessage(curScintilla, SciMsg.SCI_GETTEXT, length, sb);
             return sb.ToString();
         }
-
-
 
 
         public static string GetDocumentText(IntPtr curScintilla)
@@ -424,12 +422,9 @@ namespace Kbg.Demo.Namespace
                 MessageBox.Show(sessionPath, "Saved Session File :", MessageBoxButtons.OK);
         }
 
-        static void DockableDlgDemo()
+        static void ConvertKramdown()
         {
-            // Dockable Dialog Demo
-            // 
-            // This demonstration shows you how to do a dockable dialog.
-            // You can create your own non dockable dialog - in this case you don't nedd this demonstration.
+            convert();
             if (frmGoToLine == null)
             {
                 frmGoToLine = new frmGoToLine();
@@ -449,7 +444,7 @@ namespace Kbg.Demo.Namespace
 
                 NppTbData _nppTbData = new NppTbData();
                 _nppTbData.hClient = frmGoToLine.Handle;
-                _nppTbData.pszName = "Go To Line #";
+                _nppTbData.pszName = "";
                 // the dlgDlg should be the index of funcItem where the current function pointer is in
                 // this case is 15.. so the initial value of funcItem[15]._cmdID - not the updated internal one !
                 _nppTbData.dlgID = idFrmGotToLine;
@@ -477,7 +472,7 @@ namespace Kbg.Demo.Namespace
                     Win32.SendMessage(PluginBase.nppData._nppHandle, NppMsg.NPPM_SETMENUITEMCHECK, PluginBase._funcItems.Items[idFrmGotToLine]._cmdID, 0);
                 }
             }
-            frmGoToLine.textBox1.Focus();
+    
         }
         #endregion
     }

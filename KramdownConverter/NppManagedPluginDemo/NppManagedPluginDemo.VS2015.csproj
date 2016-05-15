@@ -78,6 +78,35 @@
     <Compile Include="..\..\Visual Studio Project Template C#\UnmanagedExports.cs">
       <Link>UnmanagedExports.cs</Link>
     </Compile>
+    <Compile Include="KramdownSyntaxRules\AlternativeElement.cs" />
+    <Compile Include="KramdownSyntaxRules\Analyzer.cs" />
+    <Compile Include="KramdownSyntaxRules\CharacterSetElement.cs" />
+    <Compile Include="KramdownSyntaxRules\CombineElement.cs" />
+    <Compile Include="KramdownSyntaxRules\Element.cs" />
+    <Compile Include="KramdownSyntaxRules\LookAheadSet.cs" />
+    <Compile Include="KramdownSyntaxRules\Matcher.cs" />
+    <Compile Include="KramdownSyntaxRules\Node.cs" />
+    <Compile Include="KramdownSyntaxRules\ParseException.cs" />
+    <Compile Include="KramdownSyntaxRules\Parser.cs" />
+    <Compile Include="KramdownSyntaxRules\ParserCreationException.cs" />
+    <Compile Include="KramdownSyntaxRules\ParserLogException.cs" />
+    <Compile Include="KramdownSyntaxRules\Production.cs" />
+    <Compile Include="KramdownSyntaxRules\ProductionPattern.cs" />
+    <Compile Include="KramdownSyntaxRules\ProductionPatternAlternative.cs" />
+    <Compile Include="KramdownSyntaxRules\ProductionPatternElement.cs" />
+    <Compile Include="KramdownSyntaxRules\ReaderBuffer.cs" />
+    <Compile Include="KramdownSyntaxRules\RecursiveDescentParser.cs" />
+    <Compile Include="KramdownSyntaxRules\RegExp.cs" />
+    <Compile Include="KramdownSyntaxRules\RegExpException.cs" />
+    <Compile Include="KramdownSyntaxRules\RepeatElement.cs" />
+    <Compile Include="KramdownSyntaxRules\StringElement.cs" />
+    <Compile Include="KramdownSyntaxRules\Token.cs" />
+    <Compile Include="KramdownSyntaxRules\Tokenizer.cs" />
+    <Compile Include="KramdownSyntaxRules\TokenMatch.cs" />
+    <Compile Include="KramdownSyntaxRules\TokenNFA.cs" />
+    <Compile Include="KramdownSyntaxRules\TokenPattern.cs" />
+    <Compile Include="KramdownSyntaxRules\TokenRegExpParser.cs" />
+    <Compile Include="KramdownSyntaxRules\TokenStringDFA.cs" />
     <Compile Include="Forms\frmGoToLine.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,10 +129,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="grammatica-1.6, Version=1.5.0.29099, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>KramdownParser\grammatica-1.6.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
